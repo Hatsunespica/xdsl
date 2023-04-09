@@ -117,4 +117,28 @@ def AddImpl(x: KnownBits, y: KnownBits):
     return KnownBits(~possibleSumZero & known, possibleSumOne & known)
 
 
-NEED_VERIFY = ((ADD, AddImpl), (AND, AndImpl), (OR, orImpl), (XOR, XorImpl))
+def SUB(x, y):
+    return x - y
+
+
+def SubImpl(x: KnownBits, y: KnownBits):
+    # swap
+    y.knownOnes, y.knownZeros = y.knownZeros, y.knownOnes
+
+    possibleSumZero = x.getMaxValue() + y.getMaxValue() + 1
+    possibleSumOne = x.getMinValue() + y.getMinValue() + 1
+
+    carryKnownZero = ~(possibleSumZero ^ x.knownZeros ^ y.knownZeros)
+    carryKnownOne = possibleSumOne ^ y.knownOnes ^ x.knownOnes
+
+    LHSKnownUnion = x.knownZeros | x.knownOnes
+    RHSKnownUnion = y.knownZeros | y.knownOnes
+
+    caryKnownUnion = carryKnownZero | carryKnownOne
+    known = caryKnownUnion & LHSKnownUnion & RHSKnownUnion
+    # swap back
+    y.knownOnes, y.knownZeros = y.knownZeros, y.knownOnes
+    return KnownBits(~possibleSumZero & known, possibleSumOne & known)
+
+
+NEED_VERIFY = ((ADD, AddImpl), (AND, AndImpl), (OR, orImpl), (XOR, XorImpl), (SUB, SubImpl))
