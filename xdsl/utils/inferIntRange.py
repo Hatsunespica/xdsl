@@ -1,4 +1,4 @@
-from BitVector import *
+from xdsl.utils.BitVector import *
 from z3 import *
 
 
