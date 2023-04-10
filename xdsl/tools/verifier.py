@@ -133,6 +133,26 @@ spec = importlib.util.spec_from_file_location(IMPORT_FILE[:-3], IMPORT_FILE)
 module = importlib.util.module_from_spec(spec)
 spec.loader.exec_module(module)
 
+def ule(x, y):
+    if isinstance(x, int):
+        x = BitVecVal(x, WIDTH)
+    if isinstance(y, int):
+        y = BitVecVal(y, WIDTH)
+    return ULE(x, y)
+
+
+DEFAULT_MAPPING = (("If", If), ("Or", Or), ("And", And), ("Xor", Xor), ("Not", Not), ("ULE", ule))
+
+for mapping in DEFAULT_MAPPING:
+    if hasattr(module, mapping[0]):
+        setattr(module, mapping[0], mapping[1])
+
+if hasattr(module, "FUNC_MAPPING"):
+    for key, val in module.FUNC_MAPPING.items():
+        assert hasattr(module, key)
+        assert hasattr(module, val.__name__)
+        setattr(module, key, val)
+
 assert hasattr(module, "NEED_VERIFY")
 
 for job in module.NEED_VERIFY:
