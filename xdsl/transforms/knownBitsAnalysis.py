@@ -13,6 +13,7 @@ from abc import ABC
 from typing import TypeVar, cast
 from dataclasses import dataclass
 from xdsl.utils.knownBits import KnownBits
+from xdsl.passes import ModulePass
 
 from xdsl.utils.hints import isa
 from xdsl.dialects.builtin import Signedness, IntegerType, i32, i64, IndexType
@@ -124,12 +125,14 @@ class AssignAttributes(RewritePattern):
         transferFunction(op,strAttr)
 
 
-
-def knownBitsAnalysis(ctx: MLContext, module: builtin.ModuleOp):
-    walker = PatternRewriteWalker(GreedyRewritePatternApplier([
-        AssignAttributes()
-    ]),
-        walk_regions_first=True,
-        apply_recursively=True,
-        walk_reverse=False)
-    walker.rewrite_module(module)
+@dataclass
+class KnownBitsAnalysisPass(ModulePass):
+    name = "kb"
+    def apply(self, ctx: MLContext, op: builtin.ModuleOp) -> None:
+        walker = PatternRewriteWalker(GreedyRewritePatternApplier([
+            AssignAttributes()
+        ]),
+            walk_regions_first=True,
+            apply_recursively=True,
+            walk_reverse=False)
+        walker.rewrite_module(op)
