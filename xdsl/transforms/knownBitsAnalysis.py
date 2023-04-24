@@ -11,12 +11,9 @@ from functools import singledispatch
 from abc import ABC
 from typing import TypeVar, cast
 from dataclasses import dataclass
-<<<<<<< HEAD
 from xdsl.utils.knownBits import KnownBits
 from xdsl.passes import ModulePass
-=======
-from xdsl.utils.knownBits import *
->>>>>>> Verifier and knownbits analysis added
+
 
 from xdsl.utils.hints import isa
 from xdsl.dialects.builtin import Signedness, IntegerType, i32, i64, IndexType
@@ -119,7 +116,6 @@ class AssignAttributes(RewritePattern):
         strAttr = StringAttr("123123123")
         transferFunction(op, strAttr)
 
-<<<<<<< HEAD
 @dataclass
 class KnownBitsAnalysisPass(ModulePass):
     name = "kb"
@@ -131,14 +127,3 @@ class KnownBitsAnalysisPass(ModulePass):
             apply_recursively=True,
             walk_reverse=False)
         walker.rewrite_module(op)
-=======
-
-def knownBitsAnalysis(ctx: MLContext, module: builtin.ModuleOp):
-    walker = PatternRewriteWalker(GreedyRewritePatternApplier([
-        AssignAttributes()
-    ]),
-        walk_regions_first=True,
-        apply_recursively=True,
-        walk_reverse=False)
-    walker.rewrite_module(module)
->>>>>>> Verifier and knownbits analysis added
