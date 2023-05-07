@@ -15,6 +15,7 @@ from xdsl.dialects.affine import Affine
 from xdsl.dialects.arith import Arith
 from xdsl.dialects.builtin import ModuleOp, Builtin
 from xdsl.dialects.cmath import CMath
+from xdsl.dialects.transfer import Transfer
 from xdsl.dialects.cf import Cf
 from xdsl.dialects.vector import Vector
 from xdsl.dialects.memref import MemRef
@@ -223,6 +224,7 @@ class xDSLOptMain:
         self.ctx.register_dialect(PDL)
         self.ctx.register_dialect(Symref)
         self.ctx.register_dialect(Test)
+        self.ctx.register_dialect(Transfer)
 
     def register_all_frontends(self):
         """

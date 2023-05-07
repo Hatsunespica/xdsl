@@ -11,7 +11,7 @@ from functools import singledispatch
 from abc import ABC
 from typing import TypeVar, cast
 from dataclasses import dataclass
-from xdsl.utils.knownBits import KnownBits
+from xdsl.utils.knownBits import *
 from xdsl.passes import ModulePass
 
 
